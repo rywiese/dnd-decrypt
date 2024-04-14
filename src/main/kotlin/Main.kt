@@ -11,25 +11,21 @@ fun main(args: Array<String>) {
         "Ciphertext must only contain spaces and capital letters."
     }
 
-    val decryptionStrategies: List<DecryptionStrategy> = mutableListOf<DecryptionStrategy>().apply {
-        add(DecryptionStrategy.Noop)
+    val decryptionStrategies: List<Cipher> = mutableListOf<Cipher>().apply {
+        add(Cipher.Noop)
         ('A'..'Z').forEach { shiftChar: Char ->
-            add(DecryptionStrategy.Caesar(shiftChar))
-            add(DecryptionStrategy.ReverseCaesar(shiftChar))
+            add(Cipher.Caesar(shiftChar))
         }
-        add(DecryptionStrategy.Vigenere("JEFF"))
-        add(DecryptionStrategy.ReverseVigenere("JEFF"))
+        add(Cipher.Vigenere("JEFF"))
         if (keyword != null) {
-            add(DecryptionStrategy.Vigenere(keyword))
-            add(DecryptionStrategy.ReverseVigenere(keyword))
-            add(DecryptionStrategy.SimpleSubstitution(keyword))
-            add(DecryptionStrategy.ReverseSimpleSubstitution(keyword))
+            add(Cipher.Vigenere(keyword))
+            add(Cipher.SimpleSubstitution(keyword))
         }
     }
 
-    decryptionStrategies.forEach { decryptionStrategy: DecryptionStrategy ->
-        val plaintext: String = decryptionStrategy.decipher(cipherText)
-        println("${decryptionStrategy.name} decryption strategy plaintext:\n$plaintext\n")
+    decryptionStrategies.forEach { cipher: Cipher ->
+        val plaintext: String = cipher.decipher(cipherText)
+        println("${cipher.name} decryption strategy plaintext:\n$plaintext\n")
     }
 
 }
