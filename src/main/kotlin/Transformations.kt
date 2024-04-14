@@ -31,6 +31,11 @@ fun multiplicativeInverse(factor: Int): Int? = alphabet
         inverse.times(factor).mod(alphabet.length) == 1
     }
 
+/**
+ * @return whether [this] has a multiplicative inverse mod the [alphabet] size
+ */
+fun Int.isCoprime(): Boolean = multiplicativeInverse(this) != null
+
 fun Char.shiftBy(shift: Int): Char = transform(factor = 1, shift)
 
 fun Char.shiftBackBy(shift: Int): Char = this.shiftBy(shift = -shift)

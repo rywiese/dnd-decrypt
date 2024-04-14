@@ -13,14 +13,27 @@ fun main(args: Array<String>) {
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         add(Cipher.Noop)
-        ('A'..'Z').forEach { shiftChar: Char ->
+        alphabet.forEach { shiftChar: Char ->
             add(Cipher.Caesar(shiftChar))
+
+            val shift: Int = shiftChar.alphabetIndex()
+            alphabet
+                .map { char: Char ->
+                    char.alphabetIndex()
+                }
+                .filter { factor: Int ->
+                    factor.isCoprime()
+                }
+                .forEach { factor: Int ->
+                    add(Cipher.Affine(factor, shift))
+                }
         }
         add(Cipher.Vigenere("JEFF"))
         if (keyword != null) {
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
         }
+
     }
 
     ciphers.forEach { cipher: Cipher ->
