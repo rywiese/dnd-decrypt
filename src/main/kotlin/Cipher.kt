@@ -59,34 +59,27 @@ interface Cipher {
 
     }
 
+    class Caesar(val shift: Char) : Substitution by Affine(
+        factor = 1,
+        shift = -shift.alphabetIndex()
+    ) {
+
+        override val name: String = "Caesar with shift $shift"
+
+    }
+
     class Affine(val factor: Int, val shift: Int) : Substitution {
 
-        override val name: String = "Affine with formula `$factor * x + $shift mod 26`"
+        override val name: String = "Affine with formula `$factor * x + $shift mod ${alphabet.length}`"
 
-        // TODO: Find a better way?
-        val inverseFactor: Int = (1..26)
-            .firstOrNull { inverse: Int ->
-                inverse.times(factor).mod(26) == 1
-            }
-            ?: throw IllegalArgumentException("$factor must be coprime with 26")
+        val inverseFactor: Int = multiplicativeInverse(factor)
+            ?: throw IllegalArgumentException("$factor must be coprime with ${alphabet.length}")
 
         override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
             cipherChar.transform(factor, shift)
 
-        override fun decipherSubstitution(cipherChar: Char, index: Int): Char = cipherChar.zeroIndexedCode()
-            .minus(shift)
-            .times(inverseFactor)
-            .mod(26)
-            .toCharFromZeroIndexedCode()
-
-    }
-
-    class Caesar(val shift: Char) : Substitution by Affine(
-        factor = 1,
-        shift = -shift.zeroIndexedCode()
-    ) {
-
-        override val name: String = "Caesar with shift $shift"
+        override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
+            cipherChar.invertTransformation(inverseFactor, shift)
 
     }
 
@@ -109,10 +102,10 @@ interface Cipher {
         val cipherTextAlphabet: String = cipherTextAlphabetFrom(keyword)
 
         override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
-            cipherTextAlphabet[cipherChar.zeroIndexedCode()]
+            cipherTextAlphabet[cipherChar.alphabetIndex()]
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
-            plainTextAlphabet[cipherTextAlphabet.indexOf(cipherChar)]
+            alphabet[cipherTextAlphabet.indexOf(cipherChar)]
 
     }
 

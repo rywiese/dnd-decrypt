@@ -7,8 +7,8 @@ fun main(args: Array<String>) {
     val cipherFile = File(cipherFilePath)
     val cipherText: String = cipherFile.readText().replace("\n", "")
     println("Ciphertext:\n$cipherText\n")
-    assert(cipherText.all { char -> char == ' ' || char in 'A'..'Z' }) {
-        "Ciphertext must only contain spaces and capital letters."
+    assert(cipherText.all { char -> char == ' ' || char in alphabet }) {
+        "Ciphertext must only contain spaces and letters in the alphabet"
     }
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
