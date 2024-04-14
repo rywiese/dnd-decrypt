@@ -38,6 +38,15 @@ interface DecryptionStrategy {
 
     }
 
+    class Affine(val factor: Int = 1, val shift: Int) : Substitution {
+
+        override val name: String = "Affine with formula `$factor * x + $shift mod 26`"
+
+        override fun substitute(cipherChar: Char, index: Int): Char = cipherChar.transform(factor, shift)
+
+    }
+
+    @Deprecated("This is a special case of Affine where `factor` is `1`")
     class Caesar(val shift: Int) : Substitution {
 
         constructor(

@@ -29,6 +29,11 @@ class DecryptionStrategyTests : FreeSpec() {
                     "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"
                 ),
                 Row3(
+                    "QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD",
+                    DecryptionStrategy.Affine(shift = 3),
+                    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"
+                ),
+                Row3(
                     "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG",
                     DecryptionStrategy.ReverseCaesar(3),
                     "QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD"

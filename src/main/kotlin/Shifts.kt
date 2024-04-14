@@ -26,10 +26,13 @@ fun Int.toCharFromZeroIndexedCode(): Char {
     return (this + 'A'.code).toChar()
 }
 
-fun Char.shiftBy(shift: Int): Char = this.zeroIndexedCode()
+fun Char.transform(factor: Int, shift: Int): Char = this.zeroIndexedCode()
+    .times(factor)
     .plus(shift)
     .mod(26)
     .toCharFromZeroIndexedCode()
+
+fun Char.shiftBy(shift: Int): Char = transform(factor = 1, shift)
 
 fun Char.shiftBackBy(shift: Int): Char = this.shiftBy(shift = -shift)
 
