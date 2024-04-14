@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
         "Ciphertext must only contain spaces and capital letters."
     }
 
-    val decryptionStrategies: List<Cipher> = mutableListOf<Cipher>().apply {
+    val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         add(Cipher.Noop)
         ('A'..'Z').forEach { shiftChar: Char ->
             add(Cipher.Caesar(shiftChar))
@@ -23,9 +23,14 @@ fun main(args: Array<String>) {
         }
     }
 
-    decryptionStrategies.forEach { cipher: Cipher ->
+    ciphers.forEach { cipher: Cipher ->
+        // Decipher ciphertext
         val plaintext: String = cipher.decipher(cipherText)
-        println("${cipher.name} decryption strategy plaintext:\n$plaintext\n")
+        println("${cipher.name} plaintext:\n$plaintext\n")
+
+        // Just for fun, encipher plaintext
+        val recipherText: String = cipher.encipher(cipherText)
+        println("${cipher.name} reciphertext:\n$recipherText\n")
     }
 
 }
