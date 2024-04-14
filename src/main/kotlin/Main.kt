@@ -2,7 +2,7 @@ import java.io.File
 
 fun main(args: Array<String>) {
     val cipherFilePath: String = args[0]
-    val vegenereKeyword: String? = args.getOrNull(1)
+    val keyword: String? = args.getOrNull(1)
 
     val cipherFile = File(cipherFilePath)
     val cipherText: String = cipherFile.readText().replace("\n", "")
@@ -19,14 +19,16 @@ fun main(args: Array<String>) {
         }
         add(DecryptionStrategy.Vigenere("JEFF"))
         add(DecryptionStrategy.ReverseVigenere("JEFF"))
-        if (vegenereKeyword != null) {
-            add(DecryptionStrategy.Vigenere(vegenereKeyword))
-            add(DecryptionStrategy.ReverseVigenere(vegenereKeyword))
+        if (keyword != null) {
+            add(DecryptionStrategy.Vigenere(keyword))
+            add(DecryptionStrategy.ReverseVigenere(keyword))
+            add(DecryptionStrategy.SimpleSubstitution(keyword))
+            add(DecryptionStrategy.ReverseSimpleSubstitution(keyword))
         }
     }
 
     decryptionStrategies.forEach { decryptionStrategy: DecryptionStrategy ->
-        val plaintext: String = decryptionStrategy.decrypt(cipherText)
+        val plaintext: String = decryptionStrategy.decipher(cipherText)
         println("${decryptionStrategy.name} decryption strategy plaintext:\n$plaintext\n")
     }
 

@@ -2,25 +2,25 @@ interface DecryptionStrategy {
 
     val name: String
 
-    fun decrypt(cipherText: String): String {
+    fun decipher(cipherText: String): String {
         val cipherWords: List<String> = cipherText.split(' ')
-        val plaintextWords: List<String> = decrypt(cipherWords)
+        val plaintextWords: List<String> = decipher(cipherWords)
         return plaintextWords.joinToString(separator = " ")
     }
 
-    fun decrypt(cipherWords: List<String>): List<String>
+    fun decipher(cipherWords: List<String>): List<String>
 
     object Noop : DecryptionStrategy {
 
         override val name: String = "NOOP"
 
-        override fun decrypt(cipherWords: List<String>): List<String> = cipherWords
+        override fun decipher(cipherWords: List<String>): List<String> = cipherWords
 
     }
 
-    interface Historical : DecryptionStrategy {
+    interface Substitution : DecryptionStrategy {
 
-        override fun decrypt(cipherWords: List<String>): List<String> = cipherWords
+        override fun decipher(cipherWords: List<String>): List<String> = cipherWords
             .mapIndexed { cipherWordIndex: Int, cipherWord: String ->
                 val numPreviousChars: Int = cipherWords.take(cipherWordIndex)
                     .fold(0) { totalChars: Int, previousWord: String ->
@@ -38,7 +38,7 @@ interface DecryptionStrategy {
 
     }
 
-    class Caesar(val shift: Int) : Historical {
+    class Caesar(val shift: Int) : Substitution {
 
         constructor(
             shiftChar: Char
@@ -52,7 +52,7 @@ interface DecryptionStrategy {
 
     }
 
-    class ReverseCaesar(val shift: Int) : Historical by Caesar(-shift) {
+    class ReverseCaesar(val shift: Int) : Substitution by Caesar(-shift) {
 
         constructor(
             shiftChar: Char
@@ -64,7 +64,7 @@ interface DecryptionStrategy {
 
     }
 
-    class Vigenere(val keyword: String) : Historical {
+    class Vigenere(val keyword: String) : Substitution {
 
         override val name: String = "Vigenère with keyword $keyword"
 
@@ -73,12 +73,36 @@ interface DecryptionStrategy {
 
     }
 
-    class ReverseVigenere(val keyword: String) : Historical {
+    class ReverseVigenere(val keyword: String) : Substitution {
 
         override val name: String = "Reverse Vigenère with keyword $keyword"
 
         override fun substitute(cipherChar: Char, index: Int): Char =
             cipherChar.shiftBy(shiftChar = keyword[index.mod(keyword.length)])
+
+    }
+
+    class SimpleSubstitution(val keyword: String) : Substitution {
+
+        override val name: String = "Simple Substitution with keyword $keyword"
+
+        val cipherTextAlphabet: String = cipherTextAlphabetFrom(keyword)
+
+        override fun substitute(cipherChar: Char, index: Int): Char =
+            plainTextAlphabet[cipherTextAlphabet.indexOf(cipherChar)]
+
+    }
+
+    class ReverseSimpleSubstitution(val keyword: String) : Substitution {
+
+        override val name: String = "Reverse Simple Substitution with keyword $keyword"
+
+        val cipherTextAlphabet: String = cipherTextAlphabetFrom(keyword)
+
+        override fun substitute(cipherChar: Char, index: Int): Char =
+            // cipherTextAlphabet[plainTextAlphabet.indexOf(cipherChar)]
+            // Optimization
+            cipherTextAlphabet[cipherChar.zeroIndexedCode()]
 
     }
 
