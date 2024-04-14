@@ -95,17 +95,31 @@ interface Cipher {
 
     }
 
-    class SimpleSubstitution(val keyword: String) : Substitution {
+    interface WithCipherTextAlphabet : Substitution {
 
-        override val name: String = "Simple Substitution with keyword $keyword"
-
-        val cipherTextAlphabet: String = cipherTextAlphabetFrom(keyword)
+        val cipherTextAlphabet: String
 
         override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
             cipherTextAlphabet[cipherChar.alphabetIndex()]
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
             alphabet[cipherTextAlphabet.indexOf(cipherChar)]
+
+    }
+
+    class SimpleSubstitution(val keyword: String) : WithCipherTextAlphabet {
+
+        override val name: String = "Simple Substitution with keyword $keyword"
+
+        override val cipherTextAlphabet: String = permuteAlphabetWithPrefix(keyword)
+
+    }
+
+    class Shift(val shift: Int) : WithCipherTextAlphabet {
+
+        override val name: String = "Shift with shift $shift"
+
+        override val cipherTextAlphabet: String = shiftAlphabetBackBy(shift)
 
     }
 

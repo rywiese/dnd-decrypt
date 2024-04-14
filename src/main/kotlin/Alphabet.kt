@@ -31,9 +31,15 @@ fun Char.alphabetIndex(): Int = alphabet
 fun Int.toAlphabetChar(): Char = alphabet[this.mod(alphabet.length)]
 
 /**
- * @return [alphabet] rearranged so that [keyword] is the prefix,
- * and the remaining [Char]s (in the original order) are the suffix
+ * @return a permutation of [alphabet] with [keyword] as the prefix
+ * and the remaining [Char]s (in the original order) as the suffix
  */
-fun cipherTextAlphabetFrom(keyword: String): String = keyword + alphabet.filterNot { char: Char ->
+fun permuteAlphabetWithPrefix(keyword: String): String = keyword + alphabet.filterNot { char: Char ->
     char in keyword
+}
+
+fun shiftAlphabetBackBy(shift: Int): String {
+    val firstN: String = alphabet.take(shift)
+    val lastN: String = alphabet.drop(shift)
+    return "$lastN$firstN"
 }

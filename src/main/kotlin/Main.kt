@@ -17,6 +17,7 @@ fun main(args: Array<String>) {
             add(Cipher.Caesar(shiftChar))
 
             val shift: Int = shiftChar.alphabetIndex()
+            add(Cipher.Shift(shift))
             alphabet
                 .map { char: Char ->
                     char.alphabetIndex()
@@ -33,7 +34,6 @@ fun main(args: Array<String>) {
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
         }
-
     }
 
     ciphers.forEach { cipher: Cipher ->

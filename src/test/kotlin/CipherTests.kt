@@ -37,6 +37,11 @@ class CipherTests : FreeSpec() {
                     Cipher.SimpleSubstitution("ZEBRAS"),
                     "SIAA ZQ LKBA VA ZOA RFPBLUAOAR"
                 ),
+                Row3(
+                    "TUTORIAL",
+                    Cipher.Shift(3),
+                    "WXWRULDO"
+                ),
             ) { plainText: String, cipher: Cipher, cipherText: String ->
                 "${cipher.name} should encipher plaintext: $plainText" {
                     val actualCipherText: String = cipher.encipher(plainText)
@@ -74,6 +79,12 @@ class CipherTests : FreeSpec() {
                 cipher.name shouldBe "Simple Substitution with keyword ZEBRAS"
                 cipher.keyword shouldBe "ZEBRAS"
                 cipher.cipherTextAlphabet shouldBe "ZEBRASCDFGHIJKLMNOPQTUVWXY"
+            }
+            "Shift" {
+                val cipher = Cipher.Shift(3)
+                cipher.name shouldBe "Shift with shift 3"
+                cipher.shift shouldBe 3
+                cipher.cipherTextAlphabet shouldBe "DEFGHIJKLMNOPQRSTUVWXYZABC"
             }
         }
     }
