@@ -87,7 +87,7 @@ class CipherTests : FreeSpec() {
                 val cipher = Cipher.SimpleSubstitution("ZEBRAS")
                 cipher.name shouldBe "Simple Substitution with keyword ZEBRAS"
                 cipher.keyword shouldBe "ZEBRAS"
-                cipher.cipherTextAlphabet shouldBe "ZEBRASCDFGHIJKLMNOPQTUVWXY"
+                cipher.permutedAlphabet shouldBe "ZEBRASCDFGHIJKLMNOPQTUVWXY"
             }
             "Shift" {
                 val cipher = Cipher.Shift(3)
@@ -96,7 +96,7 @@ class CipherTests : FreeSpec() {
             }
             "Atbash" {
                 Cipher.Atbash.name shouldBe "Atbash"
-                Cipher.Atbash.cipherTextAlphabet shouldBe "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+                Cipher.Atbash.permutedAlphabet shouldBe "ZYXWVUTSRQPONMLKJIHGFEDCBA"
             }
             "Autokey" {
                 val cipher = Cipher.Autokey("QUEENLY")

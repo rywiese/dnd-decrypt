@@ -65,6 +65,7 @@ interface Cipher {
 
     }
 
+    // Note that this could also be a PermutedAlphabet
     class Shift(val shift: Int) : Substitution by Affine(
         factor = 1,
         shift = shift
@@ -101,31 +102,31 @@ interface Cipher {
 
     }
 
-    interface WithCipherTextAlphabet : Substitution {
+    interface PermutedAlphabet : Substitution {
 
-        val cipherTextAlphabet: String
+        val permutedAlphabet: String
 
         override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
-            cipherTextAlphabet[cipherChar.alphabetIndex()]
+            permutedAlphabet[cipherChar.alphabetIndex()]
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
-            alphabet[cipherTextAlphabet.indexOf(cipherChar)]
+            alphabet[permutedAlphabet.indexOf(cipherChar)]
 
     }
 
-    class SimpleSubstitution(val keyword: String) : WithCipherTextAlphabet {
+    class SimpleSubstitution(val keyword: String) : PermutedAlphabet {
 
         override val name: String = "Simple Substitution with keyword $keyword"
 
-        override val cipherTextAlphabet: String = permuteAlphabetWithPrefix(keyword)
+        override val permutedAlphabet: String = permuteAlphabetWithPrefix(keyword)
 
     }
 
-    object Atbash : WithCipherTextAlphabet {
+    object Atbash : PermutedAlphabet {
 
         override val name: String = "Atbash"
 
-        override val cipherTextAlphabet: String = alphabet.reversed()
+        override val permutedAlphabet: String = alphabet.reversed()
 
     }
 
