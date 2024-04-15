@@ -49,10 +49,8 @@ fun main(args: Array<String>) {
     // 2. The key is not "ABOVE"
     // 3. The plaintext for the 6th word (ciphertext "CRIXF") is "AGAIN"
 
-    // I am going to try and reverse engineer the key.
-    // Initial assumptions:
-    // 1. vigenere
-    // 2. key is 15 chars long and therefor we can get the first 5 letters of the key easily
+    // I am going to try and reverse engineer the key assuming a vigenere cipher, where index subtraction should reveal
+    // part of the key:
     val cipherChunk = "CRIXF"
     val plainChunk = "AGAIN"
     val keyChunk: String = cipherChunk
