@@ -14,15 +14,13 @@ fun main(args: Array<String>) {
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         add(Cipher.Noop)
         add(Cipher.Atbash)
-        alphabet.forEach { shiftChar: Char ->
-            add(Cipher.Caesar(shiftChar))
-
-            val shift: Int = shiftChar.alphabetIndex()
+        add(Cipher.Caesar)
+        val alphabetIndexes: List<Int> = alphabet.map { char: Char ->
+            char.alphabetIndex()
+        }
+        alphabetIndexes.forEach { shift: Int ->
             add(Cipher.Shift(shift))
-            alphabet
-                .map { char: Char ->
-                    char.alphabetIndex()
-                }
+            alphabetIndexes
                 .filter { factor: Int ->
                     factor.isCoprime()
                 }

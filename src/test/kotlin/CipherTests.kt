@@ -14,7 +14,7 @@ class CipherTests : FreeSpec() {
                 ),
                 Row3(
                     "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG",
-                    Cipher.Caesar('D'),
+                    Cipher.Caesar,
                     "QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD"
                 ),
                 Row3(
@@ -68,9 +68,8 @@ class CipherTests : FreeSpec() {
                 Cipher.Noop.name shouldBe "NOOP"
             }
             "Caesar" {
-                val cipher = Cipher.Caesar('D')
-                cipher.name shouldBe "Caesar with shift D"
-                cipher.shift shouldBe 'D'
+                val cipher = Cipher.Caesar
+                cipher.name shouldBe "Caesar"
             }
             "Affine" {
                 val cipher = Cipher.Affine(factor = 5, shift = 8)
@@ -94,7 +93,6 @@ class CipherTests : FreeSpec() {
                 val cipher = Cipher.Shift(3)
                 cipher.name shouldBe "Shift with shift 3"
                 cipher.shift shouldBe 3
-                cipher.cipherTextAlphabet shouldBe "DEFGHIJKLMNOPQRSTUVWXYZABC"
             }
             "Atbash" {
                 Cipher.Atbash.name shouldBe "Atbash"

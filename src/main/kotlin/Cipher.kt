@@ -59,12 +59,18 @@ interface Cipher {
 
     }
 
-    class Caesar(val shift: Char) : Substitution by Affine(
+    object Caesar : Substitution by Shift(-3)  {
+
+        override val name: String = "Caesar"
+
+    }
+
+    class Shift(val shift: Int) : Substitution by Affine(
         factor = 1,
-        shift = -shift.alphabetIndex()
+        shift = shift
     ) {
 
-        override val name: String = "Caesar with shift $shift"
+        override val name: String = "Shift with shift $shift"
 
     }
 
@@ -112,14 +118,6 @@ interface Cipher {
         override val name: String = "Simple Substitution with keyword $keyword"
 
         override val cipherTextAlphabet: String = permuteAlphabetWithPrefix(keyword)
-
-    }
-
-    class Shift(val shift: Int) : WithCipherTextAlphabet {
-
-        override val name: String = "Shift with shift $shift"
-
-        override val cipherTextAlphabet: String = shiftAlphabetBackBy(shift)
 
     }
 
