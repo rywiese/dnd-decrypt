@@ -86,6 +86,10 @@ class CipherTests : FreeSpec() {
                 cipher.shift shouldBe 3
                 cipher.cipherTextAlphabet shouldBe "DEFGHIJKLMNOPQRSTUVWXYZABC"
             }
+            "Atbash" {
+                Cipher.Atbash.name shouldBe "Atbash"
+                Cipher.Atbash.cipherTextAlphabet shouldBe "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+            }
         }
     }
 }

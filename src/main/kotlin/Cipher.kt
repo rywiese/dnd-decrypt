@@ -123,4 +123,12 @@ interface Cipher {
 
     }
 
+    object Atbash : WithCipherTextAlphabet {
+
+        override val name: String = "Atbash"
+
+        override val cipherTextAlphabet: String = alphabet.reversed()
+
+    }
+
 }

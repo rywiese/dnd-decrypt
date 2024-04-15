@@ -34,6 +34,7 @@ fun main(args: Array<String>) {
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
         }
+        add(Cipher.Atbash)
     }
 
     ciphers.forEach { cipher: Cipher ->
