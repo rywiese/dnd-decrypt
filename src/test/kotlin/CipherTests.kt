@@ -99,7 +99,7 @@ class CipherTests : FreeSpec() {
                 val cipher = Cipher.SimpleSubstitution("ZEBRAS")
                 cipher.name shouldBe "Simple Substitution with keyword ZEBRAS"
                 cipher.keyword shouldBe "ZEBRAS"
-                cipher.permutedAlphabet shouldBe "ZEBRASCDFGHIJKLMNOPQTUVWXY"
+                cipher.permutedAlphabet shouldBe Alphabet("ZEBRASCDFGHIJKLMNOPQTUVWXY")
             }
             "Simple Substitution when key has duplicate letter" {
                 // I didn't really consider this use case, it probably should throw on initialization but that would
@@ -107,7 +107,7 @@ class CipherTests : FreeSpec() {
                 val cipher = Cipher.SimpleSubstitution("ECLIPSE")
                 cipher.name shouldBe "Simple Substitution with keyword ECLIPSE"
                 cipher.keyword shouldBe "ECLIPSE"
-                cipher.permutedAlphabet shouldBe "ECLIPSABDFGHJKMNOQRTUVWXYZ"
+                cipher.permutedAlphabet shouldBe Alphabet("ECLIPSABDFGHJKMNOQRTUVWXYZ")
             }
             "Shift" {
                 val cipher = Cipher.Shift(3)
@@ -116,7 +116,7 @@ class CipherTests : FreeSpec() {
             }
             "Atbash" {
                 Cipher.Atbash.name shouldBe "Atbash"
-                Cipher.Atbash.permutedAlphabet shouldBe "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+                Cipher.Atbash.permutedAlphabet shouldBe Alphabet("ZYXWVUTSRQPONMLKJIHGFEDCBA")
             }
             "Autokey" {
                 val cipher = Cipher.Autokey("QUEENLY")

@@ -9,4 +9,4 @@ fun String.splitIntoSameSizeWordsAs(others: List<String>): List<String> =
         listOf(thisFirst) + thisRest.splitIntoSameSizeWordsAs(othersRest)
     }
 
-fun String.removeDuplicateChars(): String = toCharArray().distinct().joinToString(separator = "")
+fun String.removeDuplicates(): String = toCharArray().distinct().joinToString(separator = "")

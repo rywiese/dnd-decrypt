@@ -7,7 +7,7 @@ fun main(args: Array<String>) {
     val cipherFile = File(cipherFilePath)
     val cipherText: String = cipherFile.readText().replace("\n", " ")
     println("Ciphertext:\n$cipherText\n")
-    assert(cipherText.all { char -> char == ' ' || char in alphabet }) {
+    assert(cipherText.all { char -> char == ' ' || char in plaintextAlphabet }) {
         "Ciphertext must only contain spaces and letters in the alphabet"
     }
 
@@ -16,12 +16,9 @@ fun main(args: Array<String>) {
             add(Cipher.Noop)
             add(Cipher.Atbash)
             add(Cipher.Caesar)
-            val alphabetIndexes: List<Int> = alphabet.map { char: Char ->
-                char.alphabetIndex()
-            }
-            alphabetIndexes.forEach { shift: Int ->
+            plaintextAlphabet.indices().forEach { shift: Int ->
                 add(Cipher.Shift(shift))
-                alphabetIndexes
+                plaintextAlphabet.indices()
                     .filter { factor: Int ->
                         factor.isCoprime()
                     }
@@ -60,10 +57,10 @@ fun main(args: Array<String>) {
     val plainChunk = "AGAIN"
     val keyChunk: String = cipherChunk
         .mapIndexed { index: Int, cipherChar: Char ->
-            cipherChar.alphabetIndex() - plainChunk[index].alphabetIndex()
+            plaintextAlphabet.indexOf(cipherChar) - plaintextAlphabet.indexOf(plainChunk[index])
         }
         .map { keyIndex: Int ->
-            keyIndex.toAlphabetChar()
+            plaintextAlphabet[keyIndex]
         }
         .toString()
     println("My guess at the first chunk of the key is $keyChunk")

@@ -59,7 +59,7 @@ interface Cipher {
 
     }
 
-    object Caesar : Substitution by Shift(-3)  {
+    object Caesar : Substitution by Shift(-3) {
 
         override val name: String = "Caesar"
 
@@ -77,10 +77,10 @@ interface Cipher {
 
     class Affine(val factor: Int, val shift: Int) : Substitution {
 
-        override val name: String = "Affine with formula `$factor * x + $shift mod ${alphabet.length}`"
+        override val name: String = "Affine with formula `$factor * x + $shift mod ${plaintextAlphabet.length()}`"
 
         val inverseFactor: Int = multiplicativeInverse(factor)
-            ?: throw IllegalArgumentException("$factor must be coprime with ${alphabet.length}")
+            ?: throw IllegalArgumentException("$factor must be coprime with ${plaintextAlphabet.length()}")
 
         override fun encipherSubstitution(plainChar: Char, index: Int): Char =
             plainChar.transform(factor, shift)
@@ -104,13 +104,13 @@ interface Cipher {
 
     interface PermutedAlphabet : Substitution {
 
-        val permutedAlphabet: String
+        val permutedAlphabet: Alphabet
 
         override fun encipherSubstitution(plainChar: Char, index: Int): Char =
-            permutedAlphabet[plainChar.alphabetIndex()]
+            permutedAlphabet[plaintextAlphabet.indexOf(plainChar)]
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
-            alphabet[permutedAlphabet.indexOf(cipherChar)]
+            plaintextAlphabet[permutedAlphabet.indexOf(cipherChar)]
 
     }
 
@@ -118,7 +118,7 @@ interface Cipher {
 
         override val name: String = "Simple Substitution with keyword $keyword"
 
-        override val permutedAlphabet: String = permuteAlphabetWithPrefix(keyword.removeDuplicateChars())
+        override val permutedAlphabet: Alphabet = plaintextAlphabet.permuteWithPrefix(keyword.removeDuplicates())
 
     }
 
@@ -126,7 +126,7 @@ interface Cipher {
 
         override val name: String = "Atbash"
 
-        override val permutedAlphabet: String = alphabet.reversed()
+        override val permutedAlphabet: Alphabet = plaintextAlphabet.reversed()
 
     }
 
