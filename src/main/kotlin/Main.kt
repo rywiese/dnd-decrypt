@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
     }
 
     // We were given the following hints:
-    // 1. Cipher requires a key (hence why the above are commented out)
+    // 1. Cipher requires a key (hence why the non-key ciphers above are flagged off)
     // 2. The key is not "ABOVE"
     // 3. The plaintext for the 6th word (ciphertext "CRIXF") is "AGAIN"
 
