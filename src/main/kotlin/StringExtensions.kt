@@ -3,8 +3,10 @@ fun String.splitIntoSameSizeWordsAs(others: List<String>): List<String> =
         emptyList()
     } else {
         val otherFirst: String = others.first()
-        val othersRemaining: List<String> = others.drop(1)
+        val othersRest: List<String> = others.drop(1)
         val thisFirst: String = take(otherFirst.length)
-        val thisRemaining: String = drop(otherFirst.length)
-        listOf(thisFirst) + thisRemaining.splitIntoSameSizeWordsAs(othersRemaining)
+        val thisRest: String = drop(otherFirst.length)
+        listOf(thisFirst) + thisRest.splitIntoSameSizeWordsAs(othersRest)
     }
+
+fun String.removeDuplicateChars(): String = toCharArray().distinct().joinToString(separator = "")

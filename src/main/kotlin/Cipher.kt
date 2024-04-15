@@ -118,7 +118,7 @@ interface Cipher {
 
         override val name: String = "Simple Substitution with keyword $keyword"
 
-        override val permutedAlphabet: String = permuteAlphabetWithPrefix(keyword)
+        override val permutedAlphabet: String = permuteAlphabetWithPrefix(keyword.removeDuplicateChars())
 
     }
 

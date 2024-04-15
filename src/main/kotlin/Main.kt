@@ -5,7 +5,7 @@ fun main(args: Array<String>) {
     val keyword: String? = args.getOrNull(1)
 
     val cipherFile = File(cipherFilePath)
-    val cipherText: String = cipherFile.readText().replace("\n", "")
+    val cipherText: String = cipherFile.readText().replace("\n", " ")
     println("Ciphertext:\n$cipherText\n")
     assert(cipherText.all { char -> char == ' ' || char in alphabet }) {
         "Ciphertext must only contain spaces and letters in the alphabet"
@@ -31,8 +31,6 @@ fun main(args: Array<String>) {
             }
             add(Cipher.Vigenere("JEFF"))
         } else {
-            // We were given the hint that this does require a keyword
-            // We were also told that "ABOVE" is not the key...
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
             add(Cipher.Autokey(keyword))
@@ -44,9 +42,31 @@ fun main(args: Array<String>) {
         val plaintext: String = cipher.decipher(cipherText)
         println("${cipher.name} plaintext:\n$plaintext\n")
 
-        // Just for fun, encipher plaintext
+        // Just for fun, re-encipher plaintext
         val recipherText: String = cipher.encipher(cipherText)
         println("${cipher.name} reciphertext:\n$recipherText\n")
     }
+
+    // We were given the following hints:
+    // 1. Cipher requires a key (hence why the above are commented out)
+    // 2. The key is not "ABOVE"
+    // 3. The plaintext for the 6th word (ciphertext "CRIXF") is "AGAIN"
+
+    // I am going to try and reverse engineer the key.
+    // Initial assumptions:
+    // 1. vigenere
+    // 2. key is 15 chars long and therefor we can get the first 5 letters of the key easily
+    val cipherChunk = "CRIXF"
+    val plainChunk = "AGAIN"
+    val keyChunk: String = cipherChunk
+        .mapIndexed { index: Int, cipherChar: Char ->
+            cipherChar.alphabetIndex() - plainChunk[index].alphabetIndex()
+        }
+        .map { keyIndex: Int ->
+            keyIndex.toAlphabetChar()
+        }
+        .toString()
+    println("My guess at the first chunk of the key is $keyChunk")
+    // This was right, keyChunk is CLIPSE and the full key is ECLIPSE
 
 }
