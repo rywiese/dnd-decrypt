@@ -47,6 +47,11 @@ class CipherTests : FreeSpec() {
                     Cipher.Atbash,
                     "ULL YZI"
                 ),
+                Row3(
+                    "ATTACK AT DAWN",
+                    Cipher.Autokey("QUEENLY"),
+                    "QNXEPV YT WTWP"
+                ),
             ) { plainText: String, cipher: Cipher, cipherText: String ->
                 "${cipher.name} should encipher plaintext: $plainText" {
                     val actualCipherText: String = cipher.encipher(plainText)
@@ -94,6 +99,11 @@ class CipherTests : FreeSpec() {
             "Atbash" {
                 Cipher.Atbash.name shouldBe "Atbash"
                 Cipher.Atbash.cipherTextAlphabet shouldBe "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+            }
+            "Autokey" {
+                val cipher = Cipher.Autokey("QUEENLY")
+                cipher.name shouldBe "Autokey with keyword QUEENLY"
+                cipher.keyword shouldBe "QUEENLY"
             }
         }
     }

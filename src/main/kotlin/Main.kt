@@ -13,6 +13,7 @@ fun main(args: Array<String>) {
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         add(Cipher.Noop)
+        add(Cipher.Atbash)
         alphabet.forEach { shiftChar: Char ->
             add(Cipher.Caesar(shiftChar))
 
@@ -33,8 +34,8 @@ fun main(args: Array<String>) {
         if (keyword != null) {
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
+            add(Cipher.Autokey(keyword))
         }
-        add(Cipher.Atbash)
     }
 
     ciphers.forEach { cipher: Cipher ->

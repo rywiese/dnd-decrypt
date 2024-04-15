@@ -38,8 +38,21 @@ fun permuteAlphabetWithPrefix(keyword: String): String = keyword + alphabet.filt
     char in keyword
 }
 
-fun shiftAlphabetBackBy(shift: Int): String {
-    val firstN: String = alphabet.take(shift)
-    val lastN: String = alphabet.drop(shift)
-    return "$lastN$firstN"
+private val memoizedShiftedAlphabets: Map<Int, String> = mutableMapOf()
+
+fun shiftAlphabetBackBy(shift: Int): String = memoizedShiftedAlphabets
+    .getOrElse(shift) {
+        val firstN: String = alphabet.take(shift)
+        val lastN: String = alphabet.drop(shift)
+        "$lastN$firstN"
+    }
+
+object TabulaRecta {
+
+    fun alphabetFor(key: Char): String = shiftAlphabetBackBy(key.alphabetIndex())
+
+    fun decode(key: Char, char: Char): Char = alphabet[alphabetFor(key).indexOf(char)]
+
+    fun encode(key: Char, char: Char): Char = alphabetFor(key)[char.alphabetIndex()]
+
 }

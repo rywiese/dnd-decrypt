@@ -2,8 +2,8 @@ interface Cipher {
 
     val name: String
 
-    fun encipher(plaintext: String): String {
-        val plainWords: List<String> = plaintext.split(' ')
+    fun encipher(plainText: String): String {
+        val plainWords: List<String> = plainText.split(' ')
         val cipherWords: List<String> = encipher(plainWords)
         return cipherWords.joinToString(separator = " ")
     }
@@ -128,6 +128,62 @@ interface Cipher {
         override val name: String = "Atbash"
 
         override val cipherTextAlphabet: String = alphabet.reversed()
+
+    }
+
+    class Autokey(val keyword: String) : Cipher {
+
+        override val name: String = "Autokey with keyword $keyword"
+
+        override fun encipher(plainWords: List<String>): List<String> {
+            // TODO: These gymnastics suggest that the hooks defined in the base interface may not be flexible enough...
+            val plainText: String = plainWords.joinToString(separator = "")
+            val cipherText: String = encipher(
+                plainText = keyword + plainText,
+                index = keyword.length,
+                runningCipherText = ""
+            )
+            return cipherText.splitIntoSameSizeWordsAs(plainWords)
+        }
+
+        override fun decipher(cipherWords: List<String>): List<String> {
+            // TODO: These gymnastics suggest that the hooks defined in the base interface may not be flexible enough...
+            val cipherText: String = cipherWords.joinToString(separator = "")
+            val plainText: String = decipher(
+                cipherText = cipherText.replace(" ", ""),
+                index = 0,
+                runningKeyword = keyword
+            )
+            return plainText.splitIntoSameSizeWordsAs(cipherWords)
+        }
+
+        private fun encipher(plainText: String, index: Int, runningCipherText: String): String =
+            if (index >= plainText.length) {
+                runningCipherText
+            } else {
+                encipher(
+                    plainText = plainText,
+                    index = index + 1,
+                    runningCipherText = runningCipherText + TabulaRecta.encode(
+                        key = plainText[index],
+                        char = plainText[index - keyword.length]
+                    )
+                )
+            }
+
+        private fun decipher(cipherText: String, index: Int, runningKeyword: String): String =
+            if (index >= cipherText.length) {
+                runningKeyword.removePrefix(keyword)
+            } else {
+                decipher(
+                    cipherText = cipherText,
+                    index = index + 1,
+                    runningKeyword = runningKeyword + TabulaRecta.decode(
+                        key = runningKeyword[index],
+                        char = cipherText[index]
+                    )
+                )
+            }
 
     }
 
