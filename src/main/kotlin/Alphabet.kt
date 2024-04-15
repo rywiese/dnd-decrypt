@@ -7,7 +7,7 @@ val plaintextAlphabet: Alphabet = Alphabet(('A'..'Z').joinToString(""))
 /**
  * Represents all [Char]s used in a given cipher.
  *
- * Defines the mapping from [Char] to [Int], such as `A` to 0, `Z` to 26, etc. These mappings can be obtained easily
+ * Defines the mapping from [Char] to [Int], such as `A` to 0, `Z` to 25, etc. These mappings can be obtained easily
  * using the [indexOf] and [get] functions. For example, assuming the standard alphabet:
  * ```
  * alphabet.indexOf('A') == 0
