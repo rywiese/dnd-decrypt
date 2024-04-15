@@ -42,6 +42,11 @@ class CipherTests : FreeSpec() {
                     Cipher.Shift(3),
                     "WXWRULDO"
                 ),
+                Row3(
+                    "FOO BAR",
+                    Cipher.Atbash,
+                    "ULL YZI"
+                ),
             ) { plainText: String, cipher: Cipher, cipherText: String ->
                 "${cipher.name} should encipher plaintext: $plainText" {
                     val actualCipherText: String = cipher.encipher(plainText)
