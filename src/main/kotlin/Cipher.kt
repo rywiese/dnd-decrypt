@@ -36,7 +36,7 @@ interface Cipher {
         override fun decipher(cipherWords: List<String>): List<String> =
             applySubstitutions(cipherWords, ::decipherSubstitution)
 
-        fun encipherSubstitution(cipherChar: Char, index: Int): Char
+        fun encipherSubstitution(plainChar: Char, index: Int): Char
 
         fun decipherSubstitution(cipherChar: Char, index: Int): Char
 
@@ -82,8 +82,8 @@ interface Cipher {
         val inverseFactor: Int = multiplicativeInverse(factor)
             ?: throw IllegalArgumentException("$factor must be coprime with ${alphabet.length}")
 
-        override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
-            cipherChar.transform(factor, shift)
+        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
+            plainChar.transform(factor, shift)
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
             cipherChar.invertTransformation(inverseFactor, shift)
@@ -94,8 +94,8 @@ interface Cipher {
 
         override val name: String = "Vigenère with keyword $keyword"
 
-        override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
-            cipherChar.shiftBy(shiftChar = keyword[index.mod(keyword.length)])
+        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
+            plainChar.shiftBy(shiftChar = keyword[index.mod(keyword.length)])
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
             cipherChar.shiftBackBy(shiftChar = keyword[index.mod(keyword.length)])
@@ -106,8 +106,8 @@ interface Cipher {
 
         val permutedAlphabet: String
 
-        override fun encipherSubstitution(cipherChar: Char, index: Int): Char =
-            permutedAlphabet[cipherChar.alphabetIndex()]
+        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
+            permutedAlphabet[plainChar.alphabetIndex()]
 
         override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
             alphabet[permutedAlphabet.indexOf(cipherChar)]

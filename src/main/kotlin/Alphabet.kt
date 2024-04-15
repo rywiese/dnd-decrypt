@@ -1,5 +1,9 @@
 /**
  * All [Char]s that are valid for plaintext/ciphertext
+ *
+ * Note that [String] is an [Array] of [Char]s, and that the index of each [Char] in the [String] is its [Int]
+ * representation in the transformations used throughout. For example, `A` is represented by 0, `Z` by 26, etc.
+ * This is true for other permutations of the [alphabet] used later.
  */
 val alphabet: String = ('A'..'Z').joinToString("")
 
