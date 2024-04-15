@@ -12,24 +12,27 @@ fun main(args: Array<String>) {
     }
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
-        add(Cipher.Noop)
-        add(Cipher.Atbash)
-        add(Cipher.Caesar)
-        val alphabetIndexes: List<Int> = alphabet.map { char: Char ->
-            char.alphabetIndex()
-        }
-        alphabetIndexes.forEach { shift: Int ->
-            add(Cipher.Shift(shift))
-            alphabetIndexes
-                .filter { factor: Int ->
-                    factor.isCoprime()
-                }
-                .forEach { factor: Int ->
-                    add(Cipher.Affine(factor, shift))
-                }
-        }
-        add(Cipher.Vigenere("JEFF"))
-        if (keyword != null) {
+        if (keyword == null) {
+            add(Cipher.Noop)
+            add(Cipher.Atbash)
+            add(Cipher.Caesar)
+            val alphabetIndexes: List<Int> = alphabet.map { char: Char ->
+                char.alphabetIndex()
+            }
+            alphabetIndexes.forEach { shift: Int ->
+                add(Cipher.Shift(shift))
+                alphabetIndexes
+                    .filter { factor: Int ->
+                        factor.isCoprime()
+                    }
+                    .forEach { factor: Int ->
+                        add(Cipher.Affine(factor, shift))
+                    }
+            }
+            add(Cipher.Vigenere("JEFF"))
+        } else {
+            // We were given the hint that this does require a keyword
+            // We were also told that "ABOVE" is not the key...
             add(Cipher.Vigenere(keyword))
             add(Cipher.SimpleSubstitution(keyword))
             add(Cipher.Autokey(keyword))
