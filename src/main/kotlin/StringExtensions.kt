@@ -9,4 +9,7 @@ fun String.splitIntoSameSizeWordsAs(others: List<String>): List<String> =
         listOf(thisFirst) + thisRest.splitIntoSameSizeWordsAs(othersRest)
     }
 
+fun String.reInjectSpacesFrom(other: String): String =
+    splitIntoSameSizeWordsAs(other.split(" ")).joinToString(" ")
+
 fun String.removeDuplicates(): String = toCharArray().distinct().joinToString(separator = "")

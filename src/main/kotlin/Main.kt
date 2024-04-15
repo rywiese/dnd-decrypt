@@ -13,24 +13,24 @@ fun main(args: Array<String>) {
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         if (keyword == null) {
-            add(Cipher.Noop)
-            add(Cipher.Atbash)
-            add(Cipher.Caesar)
+            add(Cipher.noop)
+            add(Cipher.atbash)
+            add(Cipher.caesar)
             plaintextAlphabet.indices().forEach { shift: Int ->
-                add(Cipher.Shift(shift))
+                add(Cipher.shift(shift))
                 plaintextAlphabet.indices()
                     .filter { factor: Int ->
                         factor.isCoprime()
                     }
                     .forEach { factor: Int ->
-                        add(Cipher.Affine(factor, shift))
+                        add(Cipher.affine(factor, shift))
                     }
             }
-            add(Cipher.Vigenere("JEFF"))
+            add(Cipher.vigenere("JEFF"))
         } else {
-            add(Cipher.Vigenere(keyword))
-            add(Cipher.SimpleSubstitution(keyword))
-            add(Cipher.Autokey(keyword))
+            add(Cipher.vigenere(keyword))
+            add(Cipher.simpleSubstitution(keyword))
+            add(Cipher.autoKey(keyword))
         }
     }
 
