@@ -78,7 +78,7 @@ value class Alphabet(private val alphabet: String) {
      * @return a permutation of this [Alphabet] with [keyword] as the prefix
      * and the remaining [Char]s (in the original order) as the suffix.
      *
-     * Any duplicate [Char] (after first occurrence) are removed from [keyword].
+     * Any duplicate [Char] (after first occurrence) is removed from [keyword].
      */
     fun permuteWithPrefix(keyword: String): Alphabet = Alphabet(
         keyword.removeDuplicates() + alphabet.filterNot { char: Char ->
@@ -106,14 +106,14 @@ object TabulaRecta {
     fun alphabetFor(key: Char): Alphabet = plaintextAlphabet.shiftBackBy(plaintextAlphabet.indexOf(key))
 
     /**
-     * @return the [Char] in the tabula recta where the row is given by the [key] and the column is given by the [char]
+     * @return the [Char] in the tabula recta where the row is given by the [key] and the column is given by the [plainChar]
      */
-    fun encode(key: Char, char: Char): Char = alphabetFor(key)[plaintextAlphabet.indexOf(char)]
+    fun encipher(key: Char, plainChar: Char): Char = alphabetFor(key)[plaintextAlphabet.indexOf(plainChar)]
 
     /**
      * @return the [Char] in the "top" row of the tabula recta ([plaintextAlphabet]) where the index is the same as the
-     * index of [char] in the row keyed by [key]
+     * index of [cipherChar] in the row keyed by [key]
      */
-    fun decode(key: Char, char: Char): Char = plaintextAlphabet[alphabetFor(key).indexOf(char)]
+    fun decipher(key: Char, cipherChar: Char): Char = plaintextAlphabet[alphabetFor(key).indexOf(cipherChar)]
 
 }

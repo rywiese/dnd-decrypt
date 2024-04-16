@@ -123,9 +123,9 @@ interface Cipher {
                 encipher(
                     plainText = plainText,
                     index = index + 1,
-                    runningCipherText = runningCipherText + TabulaRecta.encode(
+                    runningCipherText = runningCipherText + TabulaRecta.encipher(
                         key = plainText[index],
-                        char = plainText[index - keyword.length]
+                        plainChar = plainText[index - keyword.length]
                     )
                 )
             }
@@ -146,9 +146,9 @@ interface Cipher {
                 decipher(
                     cipherText = cipherText,
                     index = index + 1,
-                    runningKeyword = runningKeyword + TabulaRecta.decode(
+                    runningKeyword = runningKeyword + TabulaRecta.decipher(
                         key = runningKeyword[index],
-                        char = cipherText[index]
+                        cipherChar = cipherText[index]
                     )
                 )
             }
