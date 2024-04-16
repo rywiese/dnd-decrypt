@@ -1,6 +1,6 @@
 /**
  * All [Char]s that are valid for plaintext/ciphertext. Defines the "standard" mapping of [Char]s and [Int]s
- * ('A' to 0, 'Z' to 25, etc.) and the basis for all other permutations.
+ * ('A' to 0, 'Z' to 25, etc.) and is the basis for all other permutations.
  */
 val plaintextAlphabet: Alphabet = Alphabet(('A'..'Z').joinToString(""))
 
