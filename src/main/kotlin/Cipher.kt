@@ -2,60 +2,45 @@ interface Cipher {
 
     val name: String
 
-    fun encipher(plainText: String): String {
-        val plainWords: List<String> = plainText.split(' ')
-        val cipherWords: List<String> = encipher(plainWords)
-        return cipherWords.joinToString(separator = " ")
+    fun encipher(plainText: String): String
+
+    fun decipher(cipherText: String): String
+
+    interface Substitution : Cipher {
+
+        override fun encipher(plainText: String): String = plainText.mapWords { plainWords: List<String> ->
+            plainWords.applySubstitutions(::encipherChar)
+        }
+
+        override fun decipher(cipherText: String): String = cipherText.mapWords { cipherWords: List<String> ->
+            cipherWords.applySubstitutions(::decipherChar)
+        }
+
+        fun encipherChar(plainChar: Char, index: Int): Char
+
+        fun decipherChar(cipherChar: Char, index: Int): Char
+
     }
 
-    fun decipher(cipherText: String): String {
-        val cipherWords: List<String> = cipherText.split(' ')
-        val plainWords: List<String> = decipher(cipherWords)
-        return plainWords.joinToString(separator = " ")
+    interface PermutedAlphabet : Substitution {
+
+        val permutedAlphabet: Alphabet
+
+        override fun encipherChar(plainChar: Char, index: Int): Char =
+            permutedAlphabet[plaintextAlphabet.indexOf(plainChar)]
+
+        override fun decipherChar(cipherChar: Char, index: Int): Char =
+            plaintextAlphabet[permutedAlphabet.indexOf(cipherChar)]
+
     }
-
-    fun encipher(plainWords: List<String>): List<String>
-
-    fun decipher(cipherWords: List<String>): List<String>
 
     object Noop : Cipher {
 
         override val name: String = "NOOP"
 
-        override fun encipher(plainWords: List<String>): List<String> = plainWords
+        override fun encipher(plainText: String): String = plainText
 
-        override fun decipher(cipherWords: List<String>): List<String> = cipherWords
-
-    }
-
-    interface Substitution : Cipher {
-
-        override fun encipher(plainWords: List<String>): List<String> =
-            applySubstitutions(plainWords, ::encipherSubstitution)
-
-        override fun decipher(cipherWords: List<String>): List<String> =
-            applySubstitutions(cipherWords, ::decipherSubstitution)
-
-        fun encipherSubstitution(plainChar: Char, index: Int): Char
-
-        fun decipherSubstitution(cipherChar: Char, index: Int): Char
-
-        private fun applySubstitutions(
-            words: List<String>,
-            substitute: (Char, Int) -> Char
-        ): List<String> =
-            words.mapIndexed { wordIndex: Int, word: String ->
-                val numPreviousChars: Int = words.take(wordIndex)
-                    .fold(0) { totalChars: Int, previousWord: String ->
-                        totalChars + previousWord.length
-                    }
-                word
-                    .mapIndexed { charIndex: Int, char: Char ->
-                        val index: Int = numPreviousChars + charIndex
-                        substitute(char, index)
-                    }
-                    .joinToString(separator = "")
-            }
+        override fun decipher(cipherText: String): String = cipherText
 
     }
 
@@ -82,10 +67,10 @@ interface Cipher {
         val inverseFactor: Int = multiplicativeInverse(factor)
             ?: throw IllegalArgumentException("$factor must be coprime with ${plaintextAlphabet.length()}")
 
-        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
+        override fun encipherChar(plainChar: Char, index: Int): Char =
             plainChar.transform(factor, shift)
 
-        override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
+        override fun decipherChar(cipherChar: Char, index: Int): Char =
             cipherChar.invertTransformation(inverseFactor, shift)
 
     }
@@ -94,23 +79,11 @@ interface Cipher {
 
         override val name: String = "Vigenère with keyword $keyword"
 
-        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
+        override fun encipherChar(plainChar: Char, index: Int): Char =
             plainChar.shiftBy(shiftChar = keyword[index.mod(keyword.length)])
 
-        override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
+        override fun decipherChar(cipherChar: Char, index: Int): Char =
             cipherChar.shiftBackBy(shiftChar = keyword[index.mod(keyword.length)])
-
-    }
-
-    interface PermutedAlphabet : Substitution {
-
-        val permutedAlphabet: Alphabet
-
-        override fun encipherSubstitution(plainChar: Char, index: Int): Char =
-            permutedAlphabet[plaintextAlphabet.indexOf(plainChar)]
-
-        override fun decipherSubstitution(cipherChar: Char, index: Int): Char =
-            plaintextAlphabet[permutedAlphabet.indexOf(cipherChar)]
 
     }
 
@@ -134,27 +107,14 @@ interface Cipher {
 
         override val name: String = "Autokey with keyword $keyword"
 
-        override fun encipher(plainWords: List<String>): List<String> {
-            // TODO: These gymnastics suggest that the hooks defined in the base interface may not be flexible enough...
-            val plainText: String = plainWords.joinToString(separator = "")
-            val cipherText: String = encipher(
-                plainText = keyword + plainText,
-                index = keyword.length,
-                runningCipherText = ""
-            )
-            return cipherText.splitIntoSameSizeWordsAs(plainWords)
-        }
-
-        override fun decipher(cipherWords: List<String>): List<String> {
-            // TODO: These gymnastics suggest that the hooks defined in the base interface may not be flexible enough...
-            val cipherText: String = cipherWords.joinToString(separator = "")
-            val plainText: String = decipher(
-                cipherText = cipherText.replace(" ", ""),
-                index = 0,
-                runningKeyword = keyword
-            )
-            return plainText.splitIntoSameSizeWordsAs(cipherWords)
-        }
+        override fun encipher(plainText: String): String = plainText
+            .transformDespaced { despacedPlainText: String ->
+                encipher(
+                    plainText = keyword + despacedPlainText,
+                    index = keyword.length,
+                    runningCipherText = ""
+                )
+            }
 
         private fun encipher(plainText: String, index: Int, runningCipherText: String): String =
             if (index >= plainText.length) {
@@ -167,6 +127,15 @@ interface Cipher {
                         key = plainText[index],
                         char = plainText[index - keyword.length]
                     )
+                )
+            }
+
+        override fun decipher(cipherText: String): String = cipherText
+            .transformDespaced { despacedCipherText: String ->
+                decipher(
+                    cipherText = despacedCipherText,
+                    index = 0,
+                    runningKeyword = keyword
                 )
             }
 
