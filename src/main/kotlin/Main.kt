@@ -1,3 +1,12 @@
+import cipher.Affine
+import cipher.Atbash
+import cipher.Autokey
+import cipher.Caesar
+import cipher.Cipher
+import cipher.Noop
+import cipher.Shift
+import cipher.SimpleSubstitution
+import cipher.Vigenere
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -13,24 +22,24 @@ fun main(args: Array<String>) {
 
     val ciphers: List<Cipher> = mutableListOf<Cipher>().apply {
         if (keyword == null) {
-            add(Cipher.Noop)
-            add(Cipher.Atbash)
-            add(Cipher.Caesar)
+            add(Noop)
+            add(Atbash)
+            add(Caesar)
             plaintextAlphabet.indices().forEach { shift: Int ->
-                add(Cipher.Shift(shift))
+                add(Shift(shift))
                 plaintextAlphabet.indices()
                     .filter { factor: Int ->
                         factor.isCoprime()
                     }
                     .forEach { factor: Int ->
-                        add(Cipher.Affine(factor, shift))
+                        add(Affine(factor, shift))
                     }
             }
-            add(Cipher.Vigenere("JEFF"))
+            add(Vigenere("JEFF"))
         } else {
-            add(Cipher.Vigenere(keyword))
-            add(Cipher.SimpleSubstitution(keyword))
-            add(Cipher.Autokey(keyword))
+            add(Vigenere(keyword))
+            add(SimpleSubstitution(keyword))
+            add(Autokey(keyword))
         }
     }
 
@@ -45,7 +54,7 @@ fun main(args: Array<String>) {
     }
 
     // We were given the following hints:
-    // 1. Cipher requires a key (hence why the non-key ciphers above are flagged off)
+    // 1. cipher.Cipher requires a key (hence why the non-key ciphers above are flagged off)
     // 2. The key is not "ABOVE"
     // 3. The plaintext for the 6th word (ciphertext "CRIXF") is "AGAIN"
 
