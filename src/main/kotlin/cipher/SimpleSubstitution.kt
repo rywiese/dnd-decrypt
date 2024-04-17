@@ -1,8 +1,8 @@
 package cipher
 
-import Alphabet
-import plaintextAlphabet
-import removeDuplicates
+import alphabet.Alphabet
+import alphabet.plaintextAlphabet
+import words.removeDuplicates
 
 class SimpleSubstitution(val keyword: String) : PermutedAlphabet {
 

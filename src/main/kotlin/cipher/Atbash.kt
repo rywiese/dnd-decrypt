@@ -1,7 +1,7 @@
 package cipher
 
-import Alphabet
-import plaintextAlphabet
+import alphabet.Alphabet
+import alphabet.plaintextAlphabet
 
 object Atbash : PermutedAlphabet {
 

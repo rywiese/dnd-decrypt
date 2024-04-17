@@ -1,7 +1,7 @@
 package cipher
 
-import shiftBackBy
-import shiftBy
+import alphabet.shiftBackBy
+import alphabet.shiftBy
 
 class Vigenere(val keyword: String) : Substitution {
 

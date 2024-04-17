@@ -1,3 +1,4 @@
+import alphabet.plaintextAlphabet
 import cipher.Affine
 import cipher.Atbash
 import cipher.Autokey
@@ -7,6 +8,7 @@ import cipher.Noop
 import cipher.Shift
 import cipher.SimpleSubstitution
 import cipher.Vigenere
+import alphabet.isCoprime
 import java.io.File
 
 fun main(args: Array<String>) {

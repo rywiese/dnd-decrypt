@@ -1,9 +1,9 @@
 package cipher
 
-import invertTransformation
-import multiplicativeInverse
-import plaintextAlphabet
-import transform
+import alphabet.invertTransformation
+import alphabet.multiplicativeInverse
+import alphabet.plaintextAlphabet
+import alphabet.transform
 
 class Affine(val factor: Int, val shift: Int) : Substitution {
 

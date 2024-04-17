@@ -1,3 +1,5 @@
+package alphabet
+
 /**
  * @return the result of applying the affine transformation `[factor] * x + [shift]` where `x` is the
  * index of [this] in [plaintextAlphabet]

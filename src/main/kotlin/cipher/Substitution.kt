@@ -1,7 +1,7 @@
 package cipher
 
-import applySubstitutions
-import mapWords
+import words.applySubstitutions
+import words.mapWords
 
 interface Substitution : Cipher {
 

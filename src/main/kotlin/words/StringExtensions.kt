@@ -1,3 +1,5 @@
+package words
+
 fun String.removeDuplicates(): String = toCharArray().distinct().joinToString(separator = "")
 
 /**

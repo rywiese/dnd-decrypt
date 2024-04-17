@@ -1,3 +1,4 @@
+import alphabet.Alphabet
 import cipher.Affine
 import cipher.Atbash
 import cipher.Autokey

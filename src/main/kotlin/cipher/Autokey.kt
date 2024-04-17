@@ -1,7 +1,7 @@
 package cipher
 
-import TabulaRecta
-import transformDespaced
+import alphabet.TabulaRecta
+import words.transformDespaced
 
 class Autokey(val keyword: String) : Cipher {
 
