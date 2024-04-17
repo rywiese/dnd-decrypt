@@ -1,5 +1,9 @@
 package alphabet
 
+/**
+ * From https://en.wikipedia.org/wiki/Tabula_recta
+ * A "square table of alphabets, each row of which is made by shifting the previous one to the left."
+ */
 object TabulaRecta {
 
     /**
