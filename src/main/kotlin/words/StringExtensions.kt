@@ -1,13 +1,41 @@
 package words
 
-fun String.removeDuplicates(): String = toCharArray().distinct().joinToString(separator = "")
-
 /**
  * @return a [String] resulting from splitting [this] [String] into words, applying [transform] to the words,
  * and joining the words back into a single [String]
  */
-fun String.mapWords(transform: (List<String>) -> List<String>): String =
+fun String.transformWords(transform: (List<String>) -> List<String>): String =
     transform(split(' ')).joinToString(" ")
+
+/**
+ * @return a [String] resulting from removing all spaces in [this] [String], applying [transform] to the despaced
+ * [String], and reinserting spaces back in the same positions
+ */
+fun String.transformDespaced(transform: (String) -> String): String =
+    transform(removeSpaces()).reInsertSpacesFrom(this)
+
+fun String.removeSpaces(): String = replace(oldValue = " ", newValue = "")
+
+/**
+ * @param other is assumed to have an equal number of non-space [Char]s as [this]
+ * @return [this] [String] but with spaces inserted such that the result has spaces at the same
+ * indices as the original
+ */
+fun String.reInsertSpacesFrom(other: String): String =
+    if (other.isNotEmpty()) {
+        val (space: String, otherTail: String) = if (other[0] == ' ') {
+            // drop the space and the corresponding char
+            " " to other.drop(2)
+        } else {
+            // only drop the corresponding char
+            "" to other.drop(1)
+        }
+        val head: Char = get(0)
+        val tail: String = drop(1)
+        space + head + tail.reInsertSpacesFrom(otherTail)
+    } else ""
+
+fun String.removeDuplicates(): String = toCharArray().distinct().joinToString(separator = "")
 
 /**
  * @return the [String] resulting from applying [substitute] to each [Char]
@@ -46,31 +74,3 @@ fun List<String>.zipWithOffsets(): List<Pair<String, Int>> = this
     }
     .drop(1)
     .let(this::zip)
-
-fun String.removeSpaces(): String = replace(oldValue = " ", newValue = "")
-
-/**
- * @param other is assumed to have an equal number of non-space [Char]s as [this]
- * @return [this] [String] but with spaces inserted such that the result has spaces at the same
- * indices as the original
- */
-fun String.reInsertSpacesFrom(other: String): String =
-    if (other.isNotEmpty()) {
-        val (space: String, otherTail: String) = if (other[0] == ' ') {
-            // drop the space and the corresponding char
-            " " to other.drop(2)
-        } else {
-            // only drop the corresponding char
-            "" to other.drop(1)
-        }
-        val head: Char = get(0)
-        val tail: String = drop(1)
-        space + head + tail.reInsertSpacesFrom(otherTail)
-    } else ""
-
-/**
- * @return a [String] resulting from removing all spaces in [this] [String], applying [transform] to the despaced
- * [String], and reinserting spaces back in the same positions
- */
-fun String.transformDespaced(transform: (String) -> String): String =
-    transform(removeSpaces()).reInsertSpacesFrom(this)

@@ -1,7 +1,7 @@
 package cipher
 
 import words.applySubstitutions
-import words.mapWords
+import words.transformWords
 
 /**
  * A [Cipher] where each [Char] in the plaintext is transformed to a new [Char] using only knowledge of the [Char]
@@ -12,12 +12,12 @@ import words.mapWords
 interface Substitution : Cipher {
 
     override fun encipher(plainText: String): String = plainText
-        .mapWords { plainWords: List<String> ->
+        .transformWords { plainWords: List<String> ->
             plainWords.applySubstitutions(::encipherChar)
         }
 
     override fun decipher(cipherText: String): String = cipherText
-        .mapWords { cipherWords: List<String> ->
+        .transformWords { cipherWords: List<String> ->
             cipherWords.applySubstitutions(::decipherChar)
         }
 
